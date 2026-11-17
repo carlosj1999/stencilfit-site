@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="StencilFit helps tattoo artists prepare stencil artwork at a real-world size for printing on iPhone and iPad."
+      content="Size tattoo stencils in inches or centimeters, compare several sizes on one sheet, and export a print-ready PDF on iPhone and iPad."
     />
     <link
       rel="canonical"
@@ -13,7 +13,7 @@
     />
     <meta
       property="og:title"
-      content="StencilFit — tattoo stencils at the size you measured"
+      content="StencilFit | Exact-size tattoo stencils for iPhone and iPad"
     />
     <meta
       property="og:description"
@@ -26,589 +26,14 @@
     <meta property="og:type" content="website" />
     <meta
       property="og:image"
-      content="https://carlosj1999.github.io/stencilfit-site/assets/demo-swallow.png"
+      content="https://carlosj1999.github.io/stencilfit-site/assets/demo-dagger-rose.png"
     />
-    <meta property="og:image:alt" content="StencilFit simulator demo artwork" />
+    <meta property="og:image:alt" content="Dagger-and-rose tattoo stencil from StencilFit" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#f6f1ea" />
     <link rel="icon" href="assets/app-icon.png" type="image/png" />
-    <title>StencilFit — tattoo stencils at the size you measured</title>
-    <style>
-      :root {
-        --ink: #161411;
-        --muted: #615c55;
-        --paper: #f6f1ea;
-        --surface: #fffdfa;
-        --line: #ded7ce;
-        --orange: #ea681d;
-        --orange-dark: #b9460d;
-        --blue: #1e4f75;
-        --radius: 24px;
-        --shadow: 0 24px 60px rgba(61, 46, 33, 0.13);
-      }
-      * {
-        box-sizing: border-box;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        color: var(--ink);
-        background: var(--paper);
-        font-family:
-          ui-rounded,
-          "SF Pro Rounded",
-          "Avenir Next",
-          Avenir,
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          sans-serif;
-        line-height: 1.5;
-      }
-      a {
-        color: inherit;
-      }
-      a:focus-visible,
-      summary:focus-visible {
-        outline: 3px solid var(--orange);
-        outline-offset: 4px;
-        border-radius: 5px;
-      }
-      .wrap {
-        width: min(1120px, calc(100% - 40px));
-        margin: auto;
-      }
-      .skip {
-        position: absolute;
-        left: -999px;
-        top: 12px;
-        background: var(--ink);
-        color: #fff;
-        padding: 10px 14px;
-        z-index: 5;
-      }
-      .skip:focus {
-        left: 12px;
-      }
-      .site-header {
-        padding: 18px 0;
-      }
-      .nav,
-      .nav-links,
-      .hero-actions,
-      .calibration-links,
-      .footer-row,
-      .footer-row nav {
-        display: flex;
-        align-items: center;
-      }
-      .nav,
-      .footer-row {
-        justify-content: space-between;
-        gap: 18px;
-      }
-      .brand {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-        font-size: 1.05rem;
-        font-weight: 800;
-        letter-spacing: -0.03em;
-      }
-      .brand img {
-        width: 34px;
-        height: 34px;
-        border-radius: 9px;
-      }
-      .nav-links {
-        gap: 18px;
-        font-size: 0.92rem;
-        font-weight: 700;
-      }
-      .nav-links a {
-        text-decoration: none;
-      }
-      .nav-links a:not(.button):hover {
-        color: var(--orange-dark);
-      }
-      .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 46px;
-        padding: 11px 17px;
-        border: 1px solid var(--ink);
-        border-radius: 999px;
-        background: var(--ink);
-        color: #fff;
-        font: inherit;
-        font-weight: 800;
-        text-align: center;
-        text-decoration: none;
-        transition:
-          transform 0.18s ease,
-          background 0.18s ease;
-      }
-      .button:hover {
-        transform: translateY(-2px);
-        background: var(--orange-dark);
-        border-color: var(--orange-dark);
-      }
-      .button.secondary {
-        background: transparent;
-        color: var(--ink);
-      }
-      .button.secondary:hover {
-        background: var(--surface);
-        color: var(--ink);
-      }
-      .eyebrow {
-        margin: 0 0 14px;
-        color: var(--orange-dark);
-        font-size: 0.76rem;
-        font-weight: 900;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-      }
-      h1,
-      h2,
-      h3 {
-        margin: 0;
-        line-height: 0.98;
-        letter-spacing: -0.055em;
-      }
-      h1 {
-        max-width: 620px;
-        font-size: clamp(3.35rem, 7vw, 6.25rem);
-      }
-      h2 {
-        font-size: clamp(2.5rem, 5vw, 4.45rem);
-      }
-      h3 {
-        font-size: 1.42rem;
-        letter-spacing: -0.035em;
-      }
-      .hero {
-        padding: 64px 0 78px;
-        overflow: hidden;
-      }
-      .hero-grid,
-      .process-grid,
-      .guide-grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1.04fr) minmax(320px, 0.96fr);
-        align-items: center;
-        gap: clamp(36px, 7vw, 90px);
-      }
-      .hero-copy > p:not(.eyebrow) {
-        max-width: 555px;
-        margin: 25px 0 30px;
-        color: var(--muted);
-        font-size: clamp(1.06rem, 2vw, 1.26rem);
-      }
-      .hero-actions {
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-      .microcopy {
-        margin: 15px 0 0;
-        color: var(--muted);
-        font-size: 0.84rem;
-      }
-      .hero-visual {
-        position: relative;
-        min-height: 560px;
-        display: grid;
-        place-items: center;
-      }
-      .halo {
-        position: absolute;
-        width: 430px;
-        height: 430px;
-        border-radius: 50%;
-        background: #ffd1ad;
-        transform: translate(28px, -12px);
-      }
-      .phone {
-        position: relative;
-        width: min(290px, 70vw);
-        padding: 9px;
-        border: 7px solid #20201e;
-        border-radius: 39px;
-        background: #20201e;
-        box-shadow: var(--shadow);
-        transform: rotate(4deg);
-      }
-      .phone img {
-        display: block;
-        width: 100%;
-        border-radius: 27px;
-      }
-      .capability-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 22px;
-      }
-      section {
-        padding: 104px 0;
-      }
-      .section-head {
-        display: grid;
-        grid-template-columns: 0.6fr 1fr;
-        gap: 34px;
-        align-items: end;
-        margin-bottom: 42px;
-      }
-      .section-head > p {
-        max-width: 520px;
-        margin: 0;
-        color: var(--muted);
-        font-size: 1.08rem;
-      }
-      .capabilities {
-        background: #efe8df;
-      }
-      .capability-grid {
-        gap: 20px;
-      }
-      .capability {
-        overflow: hidden;
-        border: 1px solid #d8cfc4;
-        border-radius: var(--radius);
-        background: var(--surface);
-      }
-      .capability-image {
-        display: block;
-        width: 100%;
-        aspect-ratio: 1/1.08;
-        object-fit: cover;
-        object-position: top;
-        border-bottom: 1px solid #d8cfc4;
-        background: #161616;
-      }
-      .capability:nth-child(2) .capability-image {
-        object-position: center 55%;
-      }
-      .capability:nth-child(3) .capability-image {
-        object-position: center 62%;
-      }
-      .capability-copy {
-        min-height: 176px;
-        padding: 23px;
-      }
-      .capability p {
-        margin: 10px 0 0;
-        color: var(--muted);
-        font-size: 0.94rem;
-      }
-      .tag {
-        display: inline-block;
-        margin-bottom: 10px;
-        padding: 4px 8px;
-        border-radius: 99px;
-        background: #ffe1cf;
-        color: var(--orange-dark);
-        font-size: 0.68rem;
-        font-weight: 900;
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
-      }
-      .demo-caption {
-        margin: 23px 0 0;
-        color: var(--muted);
-        font-size: 0.83rem;
-      }
-      .process-grid {
-        grid-template-columns: 1.05fr 0.95fr;
-      }
-      .steps {
-        margin: 32px 0 0;
-        padding: 0;
-        list-style: none;
-        counter-reset: steps;
-      }
-      .steps li {
-        position: relative;
-        min-height: 66px;
-        padding: 0 0 24px 67px;
-        counter-increment: steps;
-      }
-      .steps li::before {
-        content: "0" counter(steps);
-        position: absolute;
-        left: 0;
-        top: -4px;
-        color: var(--orange);
-        font-size: 1.1rem;
-        font-weight: 900;
-      }
-      .steps li::after {
-        content: "";
-        position: absolute;
-        top: 27px;
-        left: 9px;
-        bottom: 0;
-        border-left: 1px solid var(--line);
-      }
-      .steps li:last-child::after {
-        display: none;
-      }
-      .steps strong {
-        display: block;
-        font-size: 1.08rem;
-      }
-      .steps span {
-        display: block;
-        margin-top: 4px;
-        color: var(--muted);
-        font-size: 0.94rem;
-      }
-      .art-card {
-        position: relative;
-        aspect-ratio: 1;
-        overflow: hidden;
-        border-radius: var(--radius);
-        background: var(--blue);
-        box-shadow: var(--shadow);
-      }
-      .art-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        mix-blend-mode: screen;
-        opacity: 0.9;
-      }
-      .art-card div {
-        position: absolute;
-        right: 25px;
-        bottom: 24px;
-        left: 25px;
-        width: max-content;
-        padding: 6px 9px;
-        border-radius: 999px;
-        background: rgba(22, 20, 17, 0.82);
-        color: #fff;
-        font-size: 0.83rem;
-        font-weight: 800;
-      }
-      .print-guide {
-        background: var(--ink);
-        color: #fff;
-      }
-      .print-guide .eyebrow {
-        color: #ffad75;
-      }
-      .guide-grid {
-        grid-template-columns: 0.84fr 1.16fr;
-      }
-      .guide-copy > p:not(.eyebrow) {
-        color: #d9d3cc;
-        font-size: 1.07rem;
-      }
-      .calibration {
-        margin-top: 30px;
-        padding: 22px;
-        border: 1px solid #56504a;
-        border-radius: 18px;
-        background: #272421;
-      }
-      .calibration h3 {
-        font-size: 1.15rem;
-      }
-      .calibration p {
-        margin: 8px 0 16px;
-        color: #d9d3cc;
-        font-size: 0.88rem;
-      }
-      .calibration-links {
-        flex-wrap: wrap;
-        gap: 9px;
-      }
-      .calibration-links a {
-        padding: 8px 10px;
-        border: 1px solid #777067;
-        border-radius: 8px;
-        color: #fff;
-        font-size: 0.83rem;
-        font-weight: 800;
-        text-decoration: none;
-      }
-      .calibration-links a:hover {
-        border-color: #ffad75;
-        color: #ffad75;
-      }
-      .faq {
-        border-top: 1px solid #56504a;
-      }
-      details {
-        border-bottom: 1px solid #56504a;
-      }
-      summary {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 20px 0;
-        cursor: pointer;
-        font-size: 1.08rem;
-        font-weight: 800;
-        list-style: none;
-      }
-      summary::-webkit-details-marker {
-        display: none;
-      }
-      summary::after {
-        content: "+";
-        color: #ffad75;
-        font-size: 1.45rem;
-        font-weight: 400;
-      }
-      details[open] summary::after {
-        content: "−";
-      }
-      details p {
-        max-width: 600px;
-        margin: -3px 36px 20px 0;
-        color: #d9d3cc;
-        font-size: 0.95rem;
-      }
-      .faq a {
-        color: #ffad75;
-        font-weight: 800;
-      }
-      .cta {
-        padding: 105px 0;
-        text-align: center;
-      }
-      .cta h2 {
-        max-width: 790px;
-        margin: auto;
-      }
-      .cta p {
-        max-width: 580px;
-        margin: 20px auto 28px;
-        color: var(--muted);
-        font-size: 1.07rem;
-      }
-      .cta .button {
-        min-width: 220px;
-      }
-      footer {
-        border-top: 1px solid var(--line);
-        padding: 31px 0 42px;
-      }
-      .footer-row {
-        color: var(--muted);
-        font-size: 0.87rem;
-      }
-      .footer-row nav {
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        gap: 18px;
-      }
-      .footer-row a {
-        color: var(--ink);
-        font-weight: 750;
-      }
-      @media (max-width: 800px) {
-        .nav-links > a:not(.button) {
-          display: none;
-        }
-        .hero {
-          padding: 42px 0 58px;
-        }
-        .hero-grid,
-        .process-grid,
-        .guide-grid {
-          grid-template-columns: 1fr;
-        }
-        .hero-visual {
-          min-height: 450px;
-        }
-        .halo {
-          width: 350px;
-          height: 350px;
-        }
-        .section-head {
-          grid-template-columns: 1fr;
-          gap: 17px;
-        }
-        .capability-grid {
-          grid-template-columns: 1fr;
-        }
-        .capability {
-          display: grid;
-          grid-template-columns: 0.78fr 1fr;
-        }
-        .capability-image {
-          height: 100%;
-          min-height: 265px;
-          border-right: 1px solid #d8cfc4;
-          border-bottom: 0;
-        }
-        .capability-copy {
-          min-height: 0;
-          align-self: center;
-        }
-        .art-card {
-          max-width: 550px;
-        }
-        section {
-          padding: 78px 0;
-        }
-      }
-      @media (max-width: 560px) {
-        .wrap {
-          width: min(100% - 30px, 1120px);
-        }
-        .site-header {
-          padding: 14px 0;
-        }
-        .nav .button {
-          min-height: 40px;
-          padding: 8px 12px;
-          font-size: 0.78rem;
-        }
-        .hero-visual {
-          min-height: 396px;
-        }
-        .phone {
-          width: 225px;
-        }
-        .halo {
-          width: 290px;
-          height: 290px;
-          transform: translate(12px, -10px);
-        }
-        .capability {
-          display: block;
-        }
-        .capability-image {
-          height: auto;
-          min-height: 0;
-          border-right: 0;
-          border-bottom: 1px solid #d8cfc4;
-        }
-        .footer-row {
-          display: block;
-        }
-        .footer-row nav {
-          justify-content: flex-start;
-          margin-top: 12px;
-        }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
-        }
-        .button {
-          transition: none;
-        }
-      }
-    </style>
+    <title>StencilFit | Exact-size tattoo stencils for iPhone and iPad</title>
+    <link rel="stylesheet" href="assets/site.css" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -619,7 +44,7 @@
         >
         <div class="nav-links">
           <a href="#how-it-works">How it works</a
-          ><a href="#printer-guide">Printer guide</a
+          ><a href="print-tattoo-stencil-actual-size.html">Printer guide</a
           ><a
             class="button"
             href="https://apps.apple.com/app/apple-store/id6786130344?pt=129078736&amp;ct=website-product-page&amp;mt=8"
@@ -635,29 +60,29 @@
             <p class="eyebrow">Tattoo stencil print studio</p>
             <h1>Print stencils at the size you measured.</h1>
             <p>
-              Bring artwork into StencilFit, set its real-world dimensions, and
-              prepare a clean PDF for your stencil workflow on iPhone or iPad.
+              Set the physical size of your tattoo artwork, compare several sizes
+              on one sheet, and export a PDF from your iPhone or iPad.
             </p>
             <div class="hero-actions">
               <a
                 class="button"
                 href="https://apps.apple.com/app/apple-store/id6786130344?pt=129078736&amp;ct=website-product-page&amp;mt=8"
                 >Download on the App Store</a
-              ><a class="button secondary" href="#printer-guide"
-                >See the printer guide</a
+              ><a class="button secondary" href="print-tattoo-stencil-actual-size.html"
+                >Free print scale test</a
               >
             </div>
             <p class="microcopy">Free to start. No account required.</p>
           </div>
           <div
             class="hero-visual"
-            aria-label="StencilFit simulator screen showing a tattoo stencil on a US Letter sheet"
+            aria-label="StencilFit welcome screen with a sample tattoo stencil"
           >
             <div class="halo" aria-hidden="true"></div>
             <div class="phone">
               <img
                 src="assets/exact-size.png"
-                alt="StencilFit simulator screen showing a 5 by 5 inch stencil on US Letter paper"
+                alt="StencilFit welcome screen with a dagger-and-rose sample labeled 3.5 inches"
               />
             </div>
           </div>
@@ -668,12 +93,11 @@
           <div class="section-head">
             <div>
               <p class="eyebrow">Built around the print</p>
-              <h2>Make every sheet intentional.</h2>
+              <h2>Compare stencil sizes on one sheet.</h2>
             </div>
             <p>
-              StencilFit is for the small decisions that make a stencil usable,
-              from the paper it will sit on to the size it should be when it
-              leaves the printer.
+              Print several sizes of the same design on one sheet and compare
+              them before making the transfer.
             </p>
           </div>
           <div class="capability-grid">
@@ -681,7 +105,7 @@
               <img
                 class="capability-image"
                 src="assets/exact-size.png"
-                alt="Simulator screen of a 5 by 5 inch stencil placed on US Letter paper"
+                alt="StencilFit sample preview with the dagger-and-rose stencil labeled 3.5 inches"
               />
               <div class="capability-copy">
                 <h3>Set the real size</h3>
@@ -709,7 +133,7 @@
               <img
                 class="capability-image"
                 src="assets/multi-page.png"
-                alt="Simulator screen showing a 42 centimetre stencil split across six numbered pages"
+                alt="StencilFit layout preview dividing an 11.4-inch design into four pages"
               />
               <div class="capability-copy">
                 <span class="tag">Coming in the next update</span>
@@ -722,8 +146,7 @@
             </article>
           </div>
           <p class="demo-caption">
-            Screens shown are simulator demo artwork. They illustrate the app
-            interface, not a physical print result.
+            Screenshots show the StencilFit interface in the iPhone simulator.
           </p>
         </div>
       </section>
@@ -731,7 +154,7 @@
         <div class="wrap process-grid">
           <div>
             <p class="eyebrow">A calmer print workflow</p>
-            <h2>Measure once. Prepare with intention.</h2>
+            <h2>From artwork to print-ready PDF.</h2>
             <ol class="steps">
               <li>
                 <strong>Import your reference</strong
@@ -757,10 +180,10 @@
           </div>
           <div class="art-card">
             <img
-              src="assets/demo-swallow.png"
-              alt="Illustrated swallow tattoo artwork used in the StencilFit simulator demo"
+              src="assets/demo-dagger-rose.png"
+              alt="Blackwork dagger-and-rose tattoo flash from the StencilFit simulator"
             />
-            <div>Simulator demo artwork</div>
+            <div>StencilFit sample artwork</div>
           </div>
         </div>
       </section>
@@ -770,9 +193,9 @@
             <p class="eyebrow">Printer guide</p>
             <h2>Protect the scale before you print.</h2>
             <p>
-              Exact-size output depends on the printer dialog as well as the
-              file. Run the free calibration page first, then measure its
-              reference line with a physical ruler.
+              Print the free calibration sheet on the paper you plan to use and
+              check its reference lines with a ruler.
+              <a href="print-tattoo-stencil-actual-size.html">Read the exact-size printing guide</a>.
             </p>
             <div class="calibration">
               <h3>Free calibration sheets</h3>
@@ -781,8 +204,8 @@
                 Fit, or similar automatic scaling.
               </p>
               <div class="calibration-links">
-                <a href="calibration-letter.pdf">Download US Letter PDF</a
-                ><a href="calibration-a4.pdf">Download A4 PDF</a>
+                <a href="calibration-letter.pdf" download>Download US Letter PDF</a
+                ><a href="calibration-a4.pdf" download>Download A4 PDF</a>
               </div>
             </div>
           </div>
@@ -794,7 +217,7 @@
                 select Actual Size or 100% if your printer provides that
                 control. Turn off any setting that scales the page to fit.
                 <a
-                  href="https://support.apple.com/guide/iphone/print-from-iphone-iph92b545a5f/ios"
+                  href="https://support.apple.com/en-us/109349"
                   target="_blank"
                   rel="noreferrer"
                   >Apple’s AirPrint guide</a
@@ -849,6 +272,7 @@
       <div class="wrap footer-row">
         <span>StencilFit for iPhone and iPad</span>
         <nav aria-label="Footer navigation">
+          <a href="print-tattoo-stencil-actual-size.html">Printer guide</a>
           <a href="mailto:cjibanez1999@gmail.com">Support</a
           ><a href="privacy.html">Privacy policy</a>
         </nav>
